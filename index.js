@@ -19,14 +19,14 @@ dotenv.config()
 
 const mongourl = process.env.MONGO_URL
 // for local
-const client = new MongoClient(mongourl)
+// const client = new MongoClient(mongourl)
 
 // for production
-// const client = new MongoClient(mongourl, {
-//     tls: true,  // Enable TLS
-//     tlsInsecure: true,  // Ensure certificates are validated
-//     connectTimeoutMS: 10000,
-// })
+const client = new MongoClient(mongourl, {
+    tls: true,  // Enable TLS
+    tlsInsecure: true,  // Ensure certificates are validated
+    connectTimeoutMS: 10000,
+})
 const dbName = 'selectify'
 const app = express()
 const port = process.env.PORT || 3000;
@@ -107,15 +107,15 @@ const deleteOldFiles = async () => {
 cron.schedule('0 0 * * *', deleteOldFiles);
 
 // for local
-app.use(cors());
+// app.use(cors());
 
 //for production
-// app.use(cors({
-//     origin: 'https://eventoz.netlify.app', // Specify your frontend domain
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//     credentials: true // Allow cookies or other credentials to be sent
-// }));
-// app.options('*', cors()); // Preflight response to all routes
+app.use(cors({
+    origin: 'https://selectify.netlify.app', // Specify your frontend domain
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true // Allow cookies or other credentials to be sent
+}));
+app.options('*', cors()); // Preflight response to all routes
 
 app.use(bodyParser.json())
 
@@ -405,14 +405,14 @@ app.get('/gallery/show/:uniqueId', async (req, res) => {
 
 
 // for production
-// app.listen(port, '0.0.0.0', () => {
-//     console.log(`Example app listening on port ${port}`);
-// });
-
-// for local
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Example app listening on port ${port}`);
 });
+
+// for local
+// app.listen(port, () => {
+//     console.log(`Example app listening on port ${port}`);
+// });
 
 
 
